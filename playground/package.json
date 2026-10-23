@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "name": "nuxt-lootlocker-playground",
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@gwynhokkers/nuxt-lootlocker": "file:..",
+    "nuxt": "^4.6.2"
+  }
+}
