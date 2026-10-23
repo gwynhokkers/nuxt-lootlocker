@@ -9,7 +9,7 @@ Nuxt module for [LootLocker](https://lootlocker.com).
 ## Quick Setup
 
 ```bash
-npx nuxt module add @gwynhokkers/nuxt-lootlocker
+bunx nuxt module add @gwynhokkers/nuxt-lootlocker
 ```
 
 ## Contribution

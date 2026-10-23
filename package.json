@@ -5,6 +5,7 @@
   "repository": "gwynhokkers/nuxt-lootlocker",
   "license": "MIT",
   "type": "module",
+  "packageManager": "bun@1.3.11",
   "exports": {
     ".": {
       "types": "./dist/types.d.mts",
@@ -30,7 +31,7 @@
     "dev": "bun run dev:prepare && nuxt dev playground",
     "dev:build": "nuxt build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxt prepare playground",
-    "release": "bun run lint && bun run test:types && bun run test && bun run prepack && changelogen --release && npm publish --access public && git push --follow-tags",
+    "release": "bun run lint && bun run test:types && bun run test && bun run prepack && changelogen --release && bun publish --access public && git push --follow-tags",
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest watch",
