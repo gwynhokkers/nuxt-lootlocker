@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - release/cycle-*
   pull_request:
     branches:
       - main
+      - release/cycle-*
 
 jobs:
   lint:
