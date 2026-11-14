@@ -14,6 +14,9 @@ export const FEATURE_COMPOSABLES = {
   server: ['useLootLockerServer'],
 } as const satisfies Record<string, readonly string[]>
 
+/** Always registered: the low-level client every other composable builds on. */
+export const CORE_COMPOSABLES = ['useLootLocker'] as const
+
 export type FeatureName = keyof typeof FEATURE_COMPOSABLES
 
 export type FeatureToggles = Record<FeatureName, boolean>
@@ -26,7 +29,10 @@ export function defaultFeatures(): FeatureToggles {
 
 /** Composable names for every enabled feature, in registry order. */
 export function enabledComposables(features: Partial<FeatureToggles>): string[] {
-  return FEATURE_NAMES.flatMap(name =>
-    features[name] === false ? [] : [...FEATURE_COMPOSABLES[name]],
-  )
+  return [
+    ...CORE_COMPOSABLES,
+    ...FEATURE_NAMES.flatMap(name =>
+      features[name] === false ? [] : [...FEATURE_COMPOSABLES[name]],
+    ),
+  ]
 }

@@ -1,58 +1,21 @@
 import { existsSync } from 'node:fs'
 import { addImports, createResolver, defineNuxtModule, useLogger } from '@nuxt/kit'
 import { defu } from 'defu'
-import { defaultFeatures, enabledComposables } from './features'
-import type { FeatureToggles } from './features'
+import { defaultFeatures, enabledComposables } from './runtime/features'
+import type { FeatureToggles } from './runtime/features'
+import type { LootLockerPrivateRuntimeConfig, LootLockerPublicRuntimeConfig, ModuleOptions } from './runtime/types'
 
-export type { FeatureName, FeatureToggles } from './features'
+export type { FeatureName, FeatureToggles } from './runtime/features'
 
-export type LootLockerEnvironment = 'development' | 'production'
-export type LootLockerMode = 'direct' | 'proxy'
-export type LootLockerAuthMethod = 'password' | 'guest' | 'magicLink'
-export type LootLockerSessionStore = 'memory' | 'localStorage' | 'cookie'
-
-export interface ModuleOptions {
-  /** Game API key. Public: sent from the browser. */
-  gameKey: string
-  /** White label domain key. Public: sent from the browser. */
-  domainKey: string
-  /** Server key. Private: only ever present in server runtime config. */
-  serverKey: string
-  /** Game version sent when starting a session. */
-  gameVersion: string
-  /** Sent as the `is-development` header on white label calls. */
-  environment: LootLockerEnvironment
-  /** `direct` calls LootLocker from the browser; `proxy` goes through the Nitro server. */
-  mode: LootLockerMode
-  /** LootLocker API origin. */
-  baseURL: string
-  /** Per-feature toggles; disabled features register no composables. */
-  features: Partial<FeatureToggles>
-  auth: {
-    /** Sign-in methods the app offers. */
-    methods: LootLockerAuthMethod[]
-  }
-  session: {
-    /** Where the session token is kept. */
-    store: LootLockerSessionStore
-  }
-}
-
-export interface LootLockerPublicRuntimeConfig {
-  gameKey: string
-  domainKey: string
-  gameVersion: string
-  environment: LootLockerEnvironment
-  mode: LootLockerMode
-  baseURL: string
-  features: FeatureToggles
-  auth: ModuleOptions['auth']
-  session: ModuleOptions['session']
-}
-
-export interface LootLockerPrivateRuntimeConfig {
-  serverKey: string
-}
+export type {
+  LootLockerAuthMethod,
+  LootLockerEnvironment,
+  LootLockerMode,
+  LootLockerPrivateRuntimeConfig,
+  LootLockerPublicRuntimeConfig,
+  LootLockerSessionStore,
+  ModuleOptions,
+} from './runtime/types'
 
 declare module '@nuxt/schema' {
   interface PublicRuntimeConfig {
@@ -110,5 +73,6 @@ export default defineNuxtModule<ModuleOptions>({
         .map(name => ({ name, from: resolve(`./runtime/composables/${name}`) }))
         .filter(entry => ['.ts', '.js', '.mjs'].some(ext => existsSync(entry.from + ext))),
     )
+    addImports({ name: 'LootLockerError', from: resolve('./runtime/errors') })
   },
 })

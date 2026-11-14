@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url'
 import { describe, it, expect } from 'vitest'
-import { setup, useTestContext } from '@nuxt/test-utils/e2e'
+import { setup, $fetch, useTestContext } from '@nuxt/test-utils/e2e'
 
 describe('lootlocker module options', async () => {
   await setup({
@@ -31,5 +31,11 @@ describe('lootlocker module options', async () => {
     const { features } = config().public.lootlocker
     expect(features.stripe).toBe(false)
     expect(features.player).toBe(true)
+  })
+
+  it('auto-imports useLootLocker without leaking the session token into the SSR payload', async () => {
+    const html = await $fetch<string>('/')
+    expect(html).toContain('has-token')
+    expect(html).not.toContain('secret-token')
   })
 })

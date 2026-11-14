@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { defaultFeatures, enabledComposables, FEATURE_NAMES } from '../src/features'
+import { defaultFeatures, enabledComposables, FEATURE_NAMES } from '../src/runtime/features'
 
 describe('feature toggles', () => {
   it('enables every feature by default', () => {
@@ -17,6 +17,11 @@ describe('feature toggles', () => {
     expect(without).not.toContain('useEntitlements')
     expect(without).not.toContain('useStripeCheckout')
     expect(without).toContain('usePlayer')
+  })
+
+  it('always includes the core client composable', () => {
+    const none = Object.fromEntries(FEATURE_NAMES.map(name => [name, false]))
+    expect(enabledComposables(none)).toEqual(['useLootLocker'])
   })
 
   it('treats unspecified features as enabled', () => {
